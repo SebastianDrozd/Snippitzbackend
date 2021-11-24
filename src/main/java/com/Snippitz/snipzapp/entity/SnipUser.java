@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class SnipUser {
 
     @Id
@@ -25,4 +26,5 @@ public class SnipUser {
     private UUID id;
     private String snipUsername;
     private String snipPassword;
+    private String token;
 }

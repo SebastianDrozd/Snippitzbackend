@@ -32,4 +32,6 @@ public class Post {
     private String description;
     private String language;
     private long likes;
+    private String author;
+    private String code;
 }

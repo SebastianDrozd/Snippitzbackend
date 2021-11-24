@@ -11,5 +11,6 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<SnipUser, UUID> {
     public SnipUser findSnipUserBySnipUsername(String username);
+    public boolean existsBySnipUsername(String username);
 
 }
