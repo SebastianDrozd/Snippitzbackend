@@ -1,7 +1,9 @@
 package com.Snippitz.snipzapp.service;
 
+import com.Snippitz.snipzapp.dto.UpdateCommentDto;
 import com.Snippitz.snipzapp.entity.Comment;
 import com.Snippitz.snipzapp.entity.Post;
+import com.Snippitz.snipzapp.error.ResourceNotFoundException;
 import com.Snippitz.snipzapp.repository.CommentRepository;
 import com.Snippitz.snipzapp.repository.PostRepository;
 import com.Snippitz.snipzapp.repository.UserRepository;
@@ -30,10 +32,25 @@ public class CommentService {
     }
 
     public List<Comment> getComments(UUID id){
-        return this.commentRepository.findByPostId( id );
+        return this.commentRepository.findByPostIdOrderByDateCreatedDesc( id );
     }
 
     public List<Comment> getAllComments() {
         return this.commentRepository.findAll();
+    }
+
+    public Comment updateComment(Long commentId, UpdateCommentDto updateCommentDto) {
+            Comment comment =commentRepository.findById(commentId).orElseThrow(() -> {throw new ResourceNotFoundException();});
+            comment.setCommentMessage(updateCommentDto.getCommentMessage());
+            commentRepository.save(comment);
+            return comment;
+
+    }
+
+    public void deleteComment(Long commentId) {
+       Comment comment =  this.commentRepository.findById(commentId).orElseThrow(() -> {
+           throw new ResourceNotFoundException();
+       });
+       this.commentRepository.delete(comment);
     }
 }

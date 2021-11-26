@@ -5,9 +5,14 @@ import com.Snippitz.snipzapp.dto.UpdatePostDto;
 import com.Snippitz.snipzapp.entity.Post;
 import com.Snippitz.snipzapp.service.LanguageService;
 import com.Snippitz.snipzapp.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -103,6 +108,7 @@ public class PostController {
                 .description(post.getDescription())
                 .likes(post.getLikes())
                 .build();
+
         return ResponseEntity.ok(readPostDto);
     }
 
@@ -127,6 +133,19 @@ public class PostController {
     @DeleteMapping("/api/posts/{postId}")
     public void deletePost(@PathVariable UUID postId){
         this.postService.deletePost(postId);
+    }
+
+
+    @GetMapping("/api/posts/query")
+    public ResponseEntity<List<Post>> getAllPostsPageable(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "createdAt") String sortBy)
+    {
+        System.out.println("it hit");
+        List<Post> list = this.postService.getAllEmployeesPageable(pageNo, pageSize, sortBy);
+
+        return new ResponseEntity<List<Post>>(list, new HttpHeaders(), HttpStatus.OK);
     }
 
 }

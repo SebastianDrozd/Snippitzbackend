@@ -6,6 +6,7 @@ import com.Snippitz.snipzapp.dto.UserLoginDto;
 import com.Snippitz.snipzapp.entity.ConnectionMessage;
 import com.Snippitz.snipzapp.entity.SnipUser;
 
+import com.Snippitz.snipzapp.entity.VerifyTokenMessage;
 import com.Snippitz.snipzapp.repository.UserRepository;
 import com.Snippitz.snipzapp.service.UserService;
 import com.auth0.jwt.JWT;
@@ -124,7 +125,7 @@ public class UserController {
     public ResponseEntity<?> verifytoken(@RequestHeader HttpHeaders httpHeaders){
 
         String token = httpHeaders.getFirst(HttpHeaders.AUTHORIZATION);
-
+        String snipUsername = "";
         String realToken = token.substring(7);
         System.out.println(realToken);
         try {
@@ -133,13 +134,18 @@ public class UserController {
                     .withIssuer("auth0")
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(realToken);
+
             System.out.println(jwt.getClaim("username"));
             Claim username = jwt.getClaim("username");
-            username.toString();
+            System.out.println("claim:" + username);
+           snipUsername =  username.toString();
+            snipUsername =snipUsername.substring(1);
+            snipUsername = snipUsername.replace("\"","");
+            System.out.println(snipUsername);
         } catch (JWTVerificationException exception){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok("good to");
+        return ResponseEntity.ok(new VerifyTokenMessage("valid", snipUsername));
     }
 
 }

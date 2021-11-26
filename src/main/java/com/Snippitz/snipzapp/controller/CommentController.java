@@ -1,7 +1,9 @@
 package com.Snippitz.snipzapp.controller;
 
+import com.Snippitz.snipzapp.dto.UpdateCommentDto;
 import com.Snippitz.snipzapp.entity.Comment;
 import com.Snippitz.snipzapp.service.CommentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +37,17 @@ public class CommentController {
     public Comment postComment( @PathVariable UUID postId,@RequestBody Comment comment){
         commentService.postComment(postId,comment);
         return comment;
+    }
+
+    @PutMapping("/api/comments/{commentId}")
+    public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentDto updateCommentDto){
+       Comment comment = this.commentService.updateComment(commentId, updateCommentDto);
+       return ResponseEntity.ok(comment);
+    }
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("/api/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId){
+        this.commentService.deleteComment(commentId);
+        return ResponseEntity.ok("deleted");
     }
 }
