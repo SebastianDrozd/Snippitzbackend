@@ -1,9 +1,14 @@
 package com.Snippitz.snipzapp.service;
 
 import com.Snippitz.snipzapp.dto.UpdatePostDto;
+
 import com.Snippitz.snipzapp.entity.Post;
+import com.Snippitz.snipzapp.entity.SnipUser;
+import com.Snippitz.snipzapp.entity.UserLike;
 import com.Snippitz.snipzapp.error.ResourceNotFoundException;
+import com.Snippitz.snipzapp.repository.LikeRepository;
 import com.Snippitz.snipzapp.repository.PostRepository;
+import com.Snippitz.snipzapp.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,15 +16,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
 public class PostService {
+    private final LikeRepository likeRepository;
 
     private final PostRepository postRepository;
 
-    public PostService(PostRepository postRepository) {
+    private final UserRepository userRepository;
+    public PostService(LikeRepository likeRepository, PostRepository postRepository, UserRepository userRepository) {
+        this.likeRepository = likeRepository;
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Post> getAllPosts(){
@@ -69,5 +79,19 @@ public class PostService {
         } else {
             return new ArrayList<Post>();
         }
+    }
+
+    public UserLike sendALike(UUID postId, UUID userId) {
+
+        List<UserLike> list = this.likeRepository.findByPostIdAndUserId(postId,userId);
+        if(list.size() > 0){
+            throw new ResourceNotFoundException();
+        }
+        SnipUser snipUser = this.userRepository.findById(userId).get();
+        Post post = this.postRepository.findById(postId).get();
+        UserLike userLike = new UserLike(new Random().nextLong(),post,snipUser);
+
+
+        return this.likeRepository.save(userLike);
     }
 }

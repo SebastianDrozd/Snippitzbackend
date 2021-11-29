@@ -41,8 +41,8 @@ public class CommentController {
 
     @PutMapping("/api/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentDto updateCommentDto){
-       Comment comment = this.commentService.updateComment(commentId, updateCommentDto);
-       return ResponseEntity.ok(comment);
+        Comment comment = this.commentService.updateComment(commentId, updateCommentDto);
+        return ResponseEntity.ok(comment);
     }
     @CrossOrigin(origins = "*")
     @DeleteMapping("/api/comments/{commentId}")

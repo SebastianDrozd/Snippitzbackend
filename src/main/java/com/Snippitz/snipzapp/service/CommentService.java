@@ -40,17 +40,17 @@ public class CommentService {
     }
 
     public Comment updateComment(Long commentId, UpdateCommentDto updateCommentDto) {
-            Comment comment =commentRepository.findById(commentId).orElseThrow(() -> {throw new ResourceNotFoundException();});
-            comment.setCommentMessage(updateCommentDto.getCommentMessage());
-            commentRepository.save(comment);
-            return comment;
+        Comment comment =commentRepository.findById(commentId).orElseThrow(() -> {throw new ResourceNotFoundException();});
+        comment.setCommentMessage(updateCommentDto.getCommentMessage());
+        commentRepository.save(comment);
+        return comment;
 
     }
 
     public void deleteComment(Long commentId) {
-       Comment comment =  this.commentRepository.findById(commentId).orElseThrow(() -> {
-           throw new ResourceNotFoundException();
-       });
-       this.commentRepository.delete(comment);
+        Comment comment =  this.commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new ResourceNotFoundException();
+        });
+        this.commentRepository.delete(comment);
     }
 }

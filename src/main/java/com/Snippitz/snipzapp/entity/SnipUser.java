@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -27,4 +28,5 @@ public class SnipUser {
     private String snipUsername;
     private String snipPassword;
     private String token;
+    private Date createdAt;
 }
